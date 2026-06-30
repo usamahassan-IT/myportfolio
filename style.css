@@ -253,7 +253,10 @@ a, button {
     transition: background 0.8s ease;
 }
 
-#main-content > * { pointer-events: auto; }
+#main-content > * { 
+    pointer-events: auto; 
+    flex-shrink: 0; /* Prevents flexbox from crushing sections to 0 height when content overflows */
+}
 
 /* ---- EDITORIAL HERO SECTION ---- */
 #hero-editorial {
@@ -547,6 +550,84 @@ body.light-mode .skill-tag {
     box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px var(--accent-glow);
 }
 
+/* ---- EDITORIAL CREDENTIALS SECTION ---- */
+#credentials-section {
+    background-color: transparent;
+    padding: 20px 5vw 120px 5vw;
+    width: 100%;
+    position: relative;
+    z-index: 20;
+}
+
+.credentials-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.credential-box {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.credential-type {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 20px;
+}
+
+.credential-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.credential-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px var(--accent-glow);
+}
+
+.credential-year {
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.credential-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.credential-issuer {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.credential-location {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
 @media (max-width: 768px) {
     /* Hide custom cursor on touch devices */
     .cursor-trail { display: none !important; }
@@ -585,6 +666,10 @@ body.light-mode .skill-tag {
     .skills-container { grid-template-columns: 1fr; gap: 40px; }
     .category-title { font-size: 1.5rem; }
     .massive-section-title { font-size: 2.5rem; }
+
+    /* Adjust Credentials Layout */
+    .credentials-container { grid-template-columns: 1fr; gap: 60px; }
+    .credential-type { font-size: 1.8rem; }
     
     /* Hide navigation links on small mobile screens to prevent overflow */
     .editorial-nav nav a { display: none; }
