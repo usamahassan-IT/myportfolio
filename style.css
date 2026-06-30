@@ -581,6 +581,119 @@ body.light-mode .skill-tag {
     box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px var(--accent-glow);
 }
 
+/* ---- PROFESSIONAL EXPERIENCE SECTION ---- */
+#experience-section {
+    background-color: transparent;
+    padding: 20px 5vw 120px 5vw;
+    width: 100%;
+    position: relative;
+    z-index: 20;
+}
+
+.experience-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.experience-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 40px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+body.light-mode .experience-card {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.experience-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 20px rgba(0, 240, 255, 0.1);
+}
+
+body.light-mode .experience-card:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.exp-role {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.exp-duration {
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.exp-company {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+body.light-mode .exp-company {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.exp-desc {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.exp-bullets {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.exp-bullets li {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    padding-left: 25px;
+    position: relative;
+    line-height: 1.6;
+}
+
+.exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent);
+    font-weight: bold;
+}
+
 /* ---- EDITORIAL CREDENTIALS SECTION ---- */
 #credentials-section {
     background-color: transparent;
@@ -701,6 +814,12 @@ body.light-mode .skill-tag {
     /* Adjust Credentials Layout */
     .credentials-container { grid-template-columns: 1fr; gap: 60px; }
     .credential-type { font-size: 1.8rem; }
+    
+    /* Adjust Experience Layout */
+    .experience-card { padding: 25px; }
+    .exp-header { flex-direction: column; align-items: flex-start; gap: 5px; }
+    .exp-role { font-size: 1.5rem; }
+
     
     /* Hide navigation links on small mobile screens to prevent overflow */
     .editorial-nav nav a { display: none; }
