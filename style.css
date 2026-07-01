@@ -1146,12 +1146,37 @@ body.light-mode .footer-socials a {
 
 
     
-    /* Hide navigation links on small mobile screens to prevent overflow */
-    .editorial-nav nav a { display: none; }
-    
-    /* Adjust padding for mobile header */
-    .editorial-nav { padding: 15px 5vw; }
-    
+    /* Mobile Navigation Layout */
+    .editorial-nav { 
+        flex-direction: column; 
+        gap: 15px; 
+        padding: 15px 5vw;
+    }
+    .editorial-nav nav { 
+        width: 100%;
+        overflow-x: auto; 
+        white-space: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 10px; /* Space for subtle scrollbar */
+        -webkit-overflow-scrolling: touch;
+    }
+    .editorial-nav nav::-webkit-scrollbar {
+        height: 3px;
+    }
+    .editorial-nav nav::-webkit-scrollbar-thumb {
+        background: rgba(0, 240, 255, 0.3);
+        border-radius: 4px;
+    }
+    /* Show links instead of hiding them */
+    .editorial-nav nav a { 
+        display: inline-block !important; 
+        font-size: 0.75rem;
+    }
+    /* Hide the theme toggle button text on mobile to save space if needed, or keep it */
+    .theme-btn {
+        font-size: 0.75rem;
+        padding: 8px 12px;
+    }
     /* Make Theme toggle slightly smaller */
     .theme-btn { font-size: 0.75rem; padding: 6px 14px; }
 }
