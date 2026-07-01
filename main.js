@@ -334,8 +334,6 @@ themeToggleBtn.addEventListener('click', () => {
     applyThreeJsTheme(isLightMode);
 });
 
-
-
 // ---- 3D TILT EFFECT FOR CARDS ----
 document.querySelectorAll('.tilt-element').forEach(card => {
     const glare = card.querySelector('.glare');
@@ -383,20 +381,22 @@ document.querySelectorAll('.tilt-element').forEach(card => {
     });
 });
 
-// ---- MOBILE MENU LOGIC ----
-const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-const siteNav = document.getElementById('site-nav');
+// ---- MOBILE MENU TOGGLE ----
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navLinksContainer = document.querySelector('.nav-links');
 
-if (mobileMenuBtn && siteNav) {
+if(mobileMenuBtn && navLinksContainer) {
     mobileMenuBtn.addEventListener('click', () => {
-        siteNav.classList.toggle('menu-open');
+        navLinksContainer.classList.toggle('active');
     });
 
-    // Close the menu when any link is clicked
-    const navLinks = siteNav.querySelectorAll('a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            siteNav.classList.remove('menu-open');
+    // Close menu when a link is clicked
+    const navAnchors = navLinksContainer.querySelectorAll('a');
+    navAnchors.forEach(a => {
+        a.addEventListener('click', () => {
+            navLinksContainer.classList.remove('active');
         });
     });
 }
+
+
