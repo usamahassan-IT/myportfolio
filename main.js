@@ -394,7 +394,10 @@ if(mobileMenuBtn && navLinksContainer) {
     const navAnchors = navLinksContainer.querySelectorAll('a');
     navAnchors.forEach(a => {
         a.addEventListener('click', () => {
-            navLinksContainer.classList.remove('active');
+            // Slight delay allows the browser to register the touch and start the scroll
+            setTimeout(() => {
+                navLinksContainer.classList.remove('active');
+            }, 150);
         });
     });
 }
@@ -409,10 +412,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         const targetElement = document.querySelector(targetId);
         if(targetElement) {
-            targetElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            // Using a slight timeout helps mobile browsers coordinate the layout shift with the scroll
+            setTimeout(() => {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 50);
         }
     });
 });
