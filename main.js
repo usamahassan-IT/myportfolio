@@ -381,44 +381,43 @@ document.querySelectorAll('.tilt-element').forEach(card => {
     });
 });
 
-// ---- MOBILE MENU TOGGLE ----
+// ---- MOBILE MENU TOGGLE & BULLETPROOF SMOOTH SCROLLING ----
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const navLinksContainer = document.querySelector('.nav-links');
+const mainContent = document.getElementById('main-content');
 
 if(mobileMenuBtn && navLinksContainer) {
     mobileMenuBtn.addEventListener('click', () => {
         navLinksContainer.classList.toggle('active');
     });
-
-    // Close menu when a link is clicked
-    const navAnchors = navLinksContainer.querySelectorAll('a');
-    navAnchors.forEach(a => {
-        a.addEventListener('click', () => {
-            // Slight delay allows the browser to register the touch and start the scroll
-            setTimeout(() => {
-                navLinksContainer.classList.remove('active');
-            }, 150);
-        });
-    });
 }
 
-// ---- SMOOTH SCROLLING FOR ANCHOR LINKS ----
+// Handle all anchor links that point to a section
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         
+        // Close mobile menu if it is currently open
+        if (navLinksContainer && navLinksContainer.classList.contains('active')) {
+            navLinksContainer.classList.remove('active');
+        }
+
         const targetId = this.getAttribute('href');
-        if(targetId === '#') return;
+        if (targetId === '#') return;
         
         const targetElement = document.querySelector(targetId);
-        if(targetElement) {
-            // Using a slight timeout helps mobile browsers coordinate the layout shift with the scroll
+        if (targetElement && mainContent) {
+            // Use offsetTop to precisely calculate the distance within the scroll container
+            // This is rock-solid across all mobile and desktop browsers
+            const targetScrollTop = targetElement.offsetTop;
+            
+            // Execute the scroll after a tiny timeout to ensure layout is settled
             setTimeout(() => {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                mainContent.scrollTo({
+                    top: targetScrollTop,
+                    behavior: 'smooth'
                 });
-            }, 50);
+            }, 10);
         }
     });
 });
