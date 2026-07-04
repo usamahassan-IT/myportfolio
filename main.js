@@ -240,7 +240,15 @@ tl.fromTo('.brand', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ea
 .to('#main-content', { opacity: 1, duration: 1 }, "-=1")
 .fromTo('.editorial-nav', { y: -50, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.5, ease: "power3.out" }, "-=0.5")
 .from('.hero-left > *', { y: 50, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power4.out" }, "-=1")
-.from('.hero-right', { x: 50, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.2");
+.from('.hero-right', { 
+    x: 50, 
+    opacity: 0, 
+    duration: 1.5, 
+    ease: "power4.out",
+    onComplete: () => {
+        if(window.initScrollAnimations) window.initScrollAnimations();
+    }
+}, "-=1.2");
 
 // ---- ANIMATED TITLES LOGIC ----
 const titles = [
@@ -422,97 +430,67 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ---- GSAP SCROLL ANIMATIONS ----
+// ---- SCROLL ANIMATIONS (3D & DYNAMIC) ----
 gsap.registerPlugin(ScrollTrigger);
 
+// Initialize ScrollAnimations using IntersectionObserver 
+// This is 100% bulletproof and doesn't rely on GSAP recalculations!
 function initScrollAnimations() {
-    // Refresh ScrollTrigger to recalculate layout now that main-content is visible
-    ScrollTrigger.refresh();
+    const observerOptions = {
+        root: document.getElementById('main-content'), // The scroll container
+        rootMargin: "0px",
+        threshold: 0.15 // Trigger when 15% of the element is visible
+    };
 
-    // 3D Reveal for Section Titles
-    gsap.utils.toArray('.massive-section-title').forEach(title => {
-        gsap.fromTo(title, 
-            { opacity: 0, rotationX: -45, y: 50, transformPerspective: 1000 }, 
-            {
-                opacity: 1, rotationX: 0, y: 0,
-                duration: 1, ease: "power3.out",
-                scrollTrigger: {
-                    trigger: title,
-                    scroller: "#main-content",
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                // Optional: stop observing once it's visible so it doesn't animate out
+                // observer.unobserve(entry.target); 
             }
-        );
+        });
+    }, observerOptions);
+
+    // 1. Animate Section Headings
+    const headings = document.querySelectorAll('.massive-section-title');
+    headings.forEach(el => { 
+        el.classList.add('scroll-anim', 'anim-slide-up'); 
+        observer.observe(el); 
     });
 
-    // Staggered 3D Reveal for Skill Tags
-    gsap.utils.toArray('.skill-category').forEach(category => {
-        const tags = category.querySelectorAll('.skill-tag');
-        gsap.fromTo(tags, 
-            { opacity: 0, scale: 0.8, rotationY: 45, y: 30, transformPerspective: 1000 }, 
-            {
-                opacity: 1, scale: 1, rotationY: 0, y: 0,
-                duration: 0.6, stagger: 0.1, ease: "back.out(1.7)",
-                scrollTrigger: {
-                    trigger: category,
-                    scroller: "#main-content",
-                    start: "top 85%"
-                }
-            }
-        );
+    // 2. Animate Experience Cards
+    const cards = document.querySelectorAll('.experience-card');
+    cards.forEach((el, index) => { 
+        el.classList.add('scroll-anim', 'anim-fade-up'); 
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el); 
     });
 
-    // 3D Flip for Experience and Credential Cards
-    gsap.utils.toArray('.experience-card, .credential-card').forEach(card => {
-        gsap.fromTo(card, 
-            { opacity: 0, rotationX: 30, y: 50, transformPerspective: 1500 }, 
-            {
-                opacity: 1, rotationX: 0, y: 0,
-                duration: 1, ease: "power3.out",
-                scrollTrigger: {
-                    trigger: card,
-                    scroller: "#main-content",
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                }
-            }
-        );
+    // 3. Animate Skills Tags
+    const tags = document.querySelectorAll('.skill-tag');
+    tags.forEach((el, index) => { 
+        el.classList.add('scroll-anim', 'anim-pop-in'); 
+        el.style.transitionDelay = `${(index % 10) * 0.05}s`;
+        observer.observe(el); 
     });
 
-    // Staggered 3D Pop for Contact Items
-    gsap.fromTo('.contact-item', 
-        { opacity: 0, x: 50, rotationY: -30, transformPerspective: 1000 }, 
-        {
-            opacity: 1, x: 0, rotationY: 0,
-            duration: 0.8, stagger: 0.15, ease: "power3.out",
-            scrollTrigger: {
-                trigger: '.contact-details-grid',
-                scroller: "#main-content",
-                start: "top 85%"
-            }
-        }
-    );
+    // 4. Animate Credentials Cards
+    const creds = document.querySelectorAll('.credential-box');
+    creds.forEach((el, index) => { 
+        el.classList.add('scroll-anim', 'anim-slide-left'); 
+        el.style.transitionDelay = `${index * 0.15}s`;
+        observer.observe(el); 
+    });
 
-    // 3D Pop for Contact Profile
-    gsap.fromTo('.contact-profile-card',
-        { opacity: 0, scale: 0.8, rotationY: 30, transformPerspective: 1000 },
-        {
-            opacity: 1, scale: 1, rotationY: 0,
-            duration: 1, ease: "power3.out",
-            scrollTrigger: {
-                trigger: '.contact-profile-card',
-                scroller: "#main-content",
-                start: "top 85%"
-            }
-        }
-    );
+    // 5. Animate Contact Items
+    const contacts = document.querySelectorAll('.contact-item, .contact-profile-card');
+    contacts.forEach((el, index) => { 
+        el.classList.add('scroll-anim', 'anim-fade-up'); 
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el); 
+    });
 }
 
-// Add the initialization to the end of the intro timeline so it runs AFTER layout is visible
-if (typeof tl !== 'undefined') {
-    tl.add(initScrollAnimations);
-} else {
-    // Fallback just in case
-    setTimeout(initScrollAnimations, 3000);
-}
+// Make it available to the timeline
+window.initScrollAnimations = initScrollAnimations;
