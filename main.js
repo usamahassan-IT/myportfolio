@@ -421,3 +421,98 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// ---- GSAP SCROLL ANIMATIONS ----
+gsap.registerPlugin(ScrollTrigger);
+
+function initScrollAnimations() {
+    // Refresh ScrollTrigger to recalculate layout now that main-content is visible
+    ScrollTrigger.refresh();
+
+    // 3D Reveal for Section Titles
+    gsap.utils.toArray('.massive-section-title').forEach(title => {
+        gsap.fromTo(title, 
+            { opacity: 0, rotationX: -45, y: 50, transformPerspective: 1000 }, 
+            {
+                opacity: 1, rotationX: 0, y: 0,
+                duration: 1, ease: "power3.out",
+                scrollTrigger: {
+                    trigger: title,
+                    scroller: "#main-content",
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+    });
+
+    // Staggered 3D Reveal for Skill Tags
+    gsap.utils.toArray('.skill-category').forEach(category => {
+        const tags = category.querySelectorAll('.skill-tag');
+        gsap.fromTo(tags, 
+            { opacity: 0, scale: 0.8, rotationY: 45, y: 30, transformPerspective: 1000 }, 
+            {
+                opacity: 1, scale: 1, rotationY: 0, y: 0,
+                duration: 0.6, stagger: 0.1, ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: category,
+                    scroller: "#main-content",
+                    start: "top 85%"
+                }
+            }
+        );
+    });
+
+    // 3D Flip for Experience and Credential Cards
+    gsap.utils.toArray('.experience-card, .credential-card').forEach(card => {
+        gsap.fromTo(card, 
+            { opacity: 0, rotationX: 30, y: 50, transformPerspective: 1500 }, 
+            {
+                opacity: 1, rotationX: 0, y: 0,
+                duration: 1, ease: "power3.out",
+                scrollTrigger: {
+                    trigger: card,
+                    scroller: "#main-content",
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+    });
+
+    // Staggered 3D Pop for Contact Items
+    gsap.fromTo('.contact-item', 
+        { opacity: 0, x: 50, rotationY: -30, transformPerspective: 1000 }, 
+        {
+            opacity: 1, x: 0, rotationY: 0,
+            duration: 0.8, stagger: 0.15, ease: "power3.out",
+            scrollTrigger: {
+                trigger: '.contact-details-grid',
+                scroller: "#main-content",
+                start: "top 85%"
+            }
+        }
+    );
+
+    // 3D Pop for Contact Profile
+    gsap.fromTo('.contact-profile-card',
+        { opacity: 0, scale: 0.8, rotationY: 30, transformPerspective: 1000 },
+        {
+            opacity: 1, scale: 1, rotationY: 0,
+            duration: 1, ease: "power3.out",
+            scrollTrigger: {
+                trigger: '.contact-profile-card',
+                scroller: "#main-content",
+                start: "top 85%"
+            }
+        }
+    );
+}
+
+// Add the initialization to the end of the intro timeline so it runs AFTER layout is visible
+if (typeof tl !== 'undefined') {
+    tl.add(initScrollAnimations);
+} else {
+    // Fallback just in case
+    setTimeout(initScrollAnimations, 3000);
+}
